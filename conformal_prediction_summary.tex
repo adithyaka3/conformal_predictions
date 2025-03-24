@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{forest}
+
+\title{Conformal Prediction}
+\author{Adithya K Anil, Rolla Siddharth Reddy, Pasupuleti Dhruv Shivkant, Nikhil Jamuda}
+\date{March 28th, 2025}
+
+\begin{document}
+\maketitle
+\section*{Summary}
+\textbf{Why we need Conformal Prediction? \\\\}
+Machine Learning models are being extensively used in a lot of areas and that includes fields which involve a lot of risk. In such risky scenarios, it becomes a necessity to quantify the uncertainty involved in every prediction made by the predictor/prediction algorithm. This allows to make safer decisions rather than having to blindly trust the model. Conformal Prediction is a framework that provides a way to quantify the uncertainty involved in the predictions made by a model.\\\\
+
+\textbf{What is the main idea behind Conformal Prediction? \\\\}
+We initially train a point-predicting model on the given data. Then we attempt to create a set of predictions for every new test point. This set of predictions is called a \textit{conformal prediction set}. Rather than creating a poor and large set, the algorithm tries to create a set "as tight as possible" around the point prediction. This set is created in such a way that it contains the true value with a probability of at least \(1 - \alpha\). This \(\alpha\) is called the \textit{significance level} and is a user-defined parameter. When the set if large, it means that the model is not very confident about the prediction whereas a small set means that the model is very confident about the prediction. So this set can be used to quantify the uncertainty involved in the prediction.\\\\
+
+\textbf{Brief explanation of what is being done\\\\}
+
+
+
+
+
+\textbf{Conformal Prediction is distribution-free. What does that mean? \\\\}
+This means that conformal prediction doesn't rely on any properties of the underlying distribution of the data nor does it rely on any properties of the model. Also, it is not any approximation / asymptotic analysis of the model. It is backed by statistics and can be used with any model and any underlying distribution of the data.\\\\
+
+
+\textbf{Why we use Bernstein Quantile Estimator and not Naive Quantile Estimator? \\\\}
+Since we are using the score function to create an ordering among the residuals obtained from the Callibration data, we can use some properties of $\Beta$ distribution because order statistics are always $\Beta$ distributed. From this we get that the the predictor $X_{\ceil{n (1 - \alpha})}$ underestimates the $1-\alpha$ quantile of the distribution of the residuals. So we take a slightly larger value of $\alpha$ to get a better estimate of the quantile. This is the reason we use the Bernstein Quantile Estimator.\\\\
+Given a sample of size \( n \), the empirical quantile estimator is chosen from the order statistics:
+
+\[
+X_{(1)}, X_{(2)}, \dots, X_{(n)}
+\]
+
+where \( X_{(k)} \) represents the \( k \)-th smallest value in the sorted dataset.
+
+\subsection*{Naive Quantile Estimation}
+A simple way to estimate the \( (1-\alpha) \)-quantile is to select:
+
+\[
+k = \lceil n(1 - \alpha) \rceil
+\]
+
+However, this underestimates the true quantile because the expected position of the order statistic is actually:
+
+\[
+F^{-1} \left( \frac{k - 0.5}{n} \right)
+\]
+
+which is slightly lower than \( F^{-1}(1 - \alpha) \).
+
+\subsection*{Bias Correction}
+To correct this, we use:
+
+\[
+k = \lceil (n+1)(1 - \alpha) \rceil
+\]
+
+This adjustment aligns the estimator with the expected quantile value and reduces bias.
+
+\subsection*{Beta Distribution and Order Statistics}
+The order statistic \( X_{(k)} \) follows a Beta distribution with:
+
+\[
+P(X_{(k)} \leq x) = I_x(k, n-k+1)
+\]
+
+where \( I_x \) is the regularized incomplete Beta function. Using \( k = (n+1)(1-\alpha) \) aligns the expectation correctly with the true quantile. \\\\
+For further analysis, please read anout the Beta Distribution and Order Statistics and Bernstein Quantile Estimator.
+
+
+\section*{What we implemented?}
+\section*{Results obtained}
+\section*{Next target?}
+
+\end{document}
