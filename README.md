@@ -3,3 +3,4 @@ Tasks Left:
 2) MNIST is overfitting so it isnt behaving very well
 3) Complete the summary
 4) Try to write more understandable version of the code in Angelopaulous repo. 
+Nice
